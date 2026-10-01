@@ -13,7 +13,6 @@ use std::{env, fs};
 
 use serde_json::Value;
 
-
 const COLOR_GREEN: &str = "\x1b[92m";
 const COLOR_RED: &str = "\x1b[91m";
 const COLOR_RESET: &str = "\x1b[00m";
@@ -36,7 +35,10 @@ fn main() {
 
 fn run(args: &[std::ffi::OsString], out: &mut impl Write) -> i32 {
     let cwd = normalize(b"", env::current_dir().unwrap().as_os_str().as_bytes());
-    let files: Vec<Vec<u8>> = args.iter().flat_map(|a| gather_files(&cwd, a.as_bytes())).collect();
+    let files: Vec<Vec<u8>> = args
+        .iter()
+        .flat_map(|a| gather_files(&cwd, a.as_bytes()))
+        .collect();
     if files.is_empty() {
         let _ = writeln!(out, "No files found.");
         return 1;
@@ -54,20 +56,32 @@ fn run(args: &[std::ffi::OsString], out: &mut impl Write) -> i32 {
         let _ = out.write_all(path);
         let _ = out.write_all(b" ");
         for (_, err) in results {
-            let (color, marker) = if err.is_none() { (COLOR_GREEN, '.') } else { (COLOR_RED, 'F') };
+            let (color, marker) = if err.is_none() {
+                (COLOR_GREEN, '.')
+            } else {
+                (COLOR_RED, 'F')
+            };
             let _ = write!(out, "{color}{marker}{COLOR_RESET}");
         }
         let _ = writeln!(out);
         for (name, err) in results {
             if let Some(msg) = err {
-                let msg = if msg.is_empty() { String::new() } else { format!(": {msg}") };
+                let msg = if msg.is_empty() {
+                    String::new()
+                } else {
+                    format!(": {msg}")
+                };
                 let _ = writeln!(out, "\t{COLOR_RED}{name}{msg}{COLOR_RESET}");
             }
         }
         total += results.len();
         passed += results.iter().filter(|(_, e)| e.is_none()).count();
     }
-    print_header(out, &format!("{passed} / {total} passed"), Some(COLOR_GREEN));
+    print_header(
+        out,
+        &format!("{passed} / {total} passed"),
+        Some(COLOR_GREEN),
+    );
     if passed == total { 0 } else { 1 }
 }
 
@@ -102,9 +116,16 @@ fn fix_file(path: &[u8]) -> Result<Value, String> {
 
 /// Joins `path` onto `base` and normalizes it lexically, like `pathlib.Path`.
 fn normalize(base: &[u8], path: &[u8]) -> Vec<u8> {
-    let joined = if path.starts_with(b"/") { path.to_vec() } else { [base, b"/", path].concat() };
+    let joined = if path.starts_with(b"/") {
+        path.to_vec()
+    } else {
+        [base, b"/", path].concat()
+    };
     let mut out = Vec::with_capacity(joined.len());
-    for part in joined.split(|&c| c == b'/').filter(|p| !p.is_empty() && *p != b".") {
+    for part in joined
+        .split(|&c| c == b'/')
+        .filter(|p| !p.is_empty() && *p != b".")
+    {
         out.push(b'/');
         out.extend_from_slice(part);
     }

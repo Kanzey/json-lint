@@ -22,7 +22,7 @@ It exits with status 1 if any file fails.
 ```yaml
 repos:
   - repo: https://github.com/Kanzey/json-lint
-    rev: v0.1.1
+    rev: v0.1.2
     hooks:
       - id: json-lint
         # files: ^config/   # optionally limit which JSON files are touched

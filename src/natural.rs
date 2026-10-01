@@ -36,7 +36,10 @@ pub fn natural_cmp(a: &str, b: &str) -> Ordering {
 
 /// Splits off a leading digit run, returning it without leading zeros.
 fn split_digits(s: &[u8]) -> (&[u8], &[u8]) {
-    let end = s.iter().position(|c| !c.is_ascii_digit()).unwrap_or(s.len());
+    let end = s
+        .iter()
+        .position(|c| !c.is_ascii_digit())
+        .unwrap_or(s.len());
     let zeros = s[..end].iter().take_while(|&&c| c == b'0').count();
     (&s[zeros..end], &s[end..])
 }
@@ -66,7 +69,8 @@ pub fn keys_are_sorted(v: &Value) -> bool {
         Value::Array(items) => items.iter().all(keys_are_sorted),
         Value::Object(map) => {
             let keys: Vec<_> = map.keys().collect();
-            keys.windows(2).all(|w| natural_cmp(w[0], w[1]) != Ordering::Greater)
+            keys.windows(2)
+                .all(|w| natural_cmp(w[0], w[1]) != Ordering::Greater)
                 && map.values().all(keys_are_sorted)
         }
         _ => true,
@@ -94,7 +98,10 @@ mod tests {
     fn sorts_nested() {
         let mut v = json!([{"b10": {"z": 1, "y": 2}, "b9": 0, "a01": 1, "a1": 2}]);
         sort_keys(&mut v);
-        assert_eq!(v.to_string(), r#"[{"a01":1,"a1":2,"b9":0,"b10":{"y":2,"z":1}}]"#);
+        assert_eq!(
+            v.to_string(),
+            r#"[{"a01":1,"a1":2,"b9":0,"b10":{"y":2,"z":1}}]"#
+        );
         assert!(keys_are_sorted(&v));
     }
 }
