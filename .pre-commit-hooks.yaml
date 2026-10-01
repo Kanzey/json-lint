@@ -1,0 +1,6 @@
+- id: json-lint
+  name: json-lint
+  description: Sort JSON object keys in natural order and reformat with a 2-space indent.
+  entry: json-lint
+  language: rust
+  types: [json]
