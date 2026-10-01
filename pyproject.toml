@@ -1,0 +1,23 @@
+[build-system]
+requires = ["maturin>=1.5,<2"]
+build-backend = "maturin"
+
+[project]
+name = "json-lint"
+description = "Fast JSON linter and fixer: natural key sorting and 2-space formatting"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "Kamil Kobza", email = "kamil1pl@gmail.com" }]
+keywords = ["json", "lint", "formatter"]
+classifiers = [
+    "Programming Language :: Rust",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Environment :: Console",
+]
+dynamic = ["version"]
+
+[tool.maturin]
+bindings = "bin"
+strip = true
