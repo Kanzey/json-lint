@@ -3,7 +3,7 @@ requires = ["maturin>=1.5,<2"]
 build-backend = "maturin"
 
 [project]
-name = "json-lint"
+name = "fast-json-lint"
 description = "Fast JSON linter and fixer: natural key sorting and 2-space formatting"
 readme = "README.md"
 requires-python = ">=3.8"

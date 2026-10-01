@@ -5,7 +5,7 @@ A fast Rust JSON linter and fixer, inspired by
 prebuilt binary on PyPI, the same way as ruff.
 
 ```bash
-pip install json-lint
+pip install fast-json-lint
 json-lint my-file.json some-dir/
 ```
 
